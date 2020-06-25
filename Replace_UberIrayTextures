@@ -1,0 +1,58 @@
+// DAZ Studio version 4.10.0.123 filetype DAZ Script
+
+(function () {
+    var node = null;
+    var folderfile = "CHARACTER_G8M";
+    var newPath = "E:\\CharacterExports\\Substance\\" + folderfile + "\\";
+
+    if (!(node = Scene.getPrimarySelection())) {
+        return; // notify user
+    };
+	
+	var shellObject = node.getObject();
+	var shape = shellObject.getCurrentShape();
+
+	var matList = [
+		"Arms",
+		"Ears",
+		"EyeSocket",
+		"Face",
+		"Legs",
+		"Lips",
+		"Torso",
+		"G8MCatTail",
+		"Genitalia"
+	];
+	
+	var txtList = [
+		["Diffuse Color", "BaseColor"],
+		["Diffuse Overlay Color", "BaseColor"],
+		["Translucency Weight", "Metallic"],
+		["Translucency Color", "BaseColor"],
+		["Dual Lobe Specular Reflectivity", "Metallic"],
+		["Glossy Layered Weight", "Metallic"],
+		["Top Coat Weight", "Roughness"],
+		["Transmitted Color", "BaseColor"],
+		["Displacement Strength", "Height"],
+		["Bump Strength", "Height"],
+		["Normal Map", "Normal"]
+	];
+		
+	var materialCount = shape.getNumMaterials();
+	
+    for (var i = 0; i < materialCount; i++) {
+       var material = shape.getMaterial(i);
+		if (matList.indexOf(material.name) > -1) {
+			for (var j = 0; j < txtList.length; j++) {
+				var property = material.findProperty(txtList[j][0]);
+		        if (property) {
+			        //var txtFile = property.getMapValue().name;
+			        var txtPath = newPath + folderfile + "_" + material.name + "_" + txtList[j][1] + ".png";
+			        print(txtPath);
+			        property.setMap(txtPath);
+			        }
+		        }
+			}
+	    }
+	})();
+    
