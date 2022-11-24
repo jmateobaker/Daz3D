@@ -1,0 +1,85 @@
+// DAZ Studio version 4.10.0.123 filetype DAZ Script
+
+(function () {
+    var node = null;
+    var folderfile = "Moose_G81M";
+    var newPath = "E:\\CharacterExports\\Substance\\" + folderfile + "\\";
+
+    if (!(node = Scene.getPrimarySelection())) {
+        return; // notify user
+    };
+	
+	var shellObject = node.getObject();
+	var shape = shellObject.getCurrentShape();
+
+	var matDict = {
+		"Arms": "5",
+		"Body": "3",
+		"Ears": "1",
+		"EyeSocket": "1",
+		"Face": "1",
+		"Legs": "4",
+		"Lips": "1",
+		"Head": "2",
+		"Genitalia": "8",
+		"Glans": "8",
+		"Rectum": "8",
+		"Shaft": "8",
+		"Testicles": "8",
+		"Torso_Back": "8",
+		"Torso_Front": "8",
+		"Torso_Middle": "8",
+		"Default_OBJ": "9"
+	};
+/*
+	var txtList = [
+		["Diffuse Color", "BaseColor"],
+		["Translucency Color", "SSS"],
+		["Dual Lobe Specular Reflectivity", "Roughness"],
+		["Bump Strength", "Height"],
+		["Skin Shades Color", "SSS"],
+		["Diffuse Overlay Color", "BaseColor"],
+		["Translucency Weight", "Metallic"],
+		["Dual Lobe Specular Reflectivity", "Metallic"],
+		["Glossy Layered Weight", "Metallic"],
+		["Top Coat Weight", "Roughness"],
+		["Transmitted Color", "BaseColor"],
+		["Displacement Strength", "Height"],
+		["Bump Strength", "Height"],
+		["Normal Map", "Normal"]
+	];
+*/
+	var txtList = [
+		["Diffuse Color", "BaseColor"],
+		["Diffuse Overlay Color", "BaseColor"],
+		["Dual Lobe Specular Weight", "Metallic"],
+		["Translucency Color", "BaseColor"],
+		["Bump Strength", "Height"],
+		["Metallic Weight", "Metallic"],
+		["Normal Map", "Normal"],
+		["Glossy Roughness", "Roughness"],
+		["Top Coat Roughness", "Roughness"],
+		["Top Coat Bump", "Normal"]
+	];
+	
+	var materialCount = shape.getNumMaterials();
+	
+    for (var i = 0; i < materialCount; i++) {
+       var material = shape.getMaterial(i);
+       var udimPrefix = "_10";
+		if (Object.keys(matDict).indexOf(material.name) > -1) {
+			if (parseInt(matDict[material.name]) < 10) {
+				udimPrefix = udimPrefix + "0";
+			}
+			for (var j = 0; j < txtList.length; j++) {
+				var property = material.findProperty(txtList[j][0]);
+		        if (property) {
+			        var txtPath = newPath + folderfile + udimPrefix + matDict[material.name] + "_" + txtList[j][1] + ".png";
+			        print(txtPath);
+			        property.setMap(txtPath);
+			        }
+		        }
+			}
+	    }
+	})();
+    
